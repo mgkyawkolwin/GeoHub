@@ -1,0 +1,6 @@
+@GeoHub_HostAddress = http://localhost:5169
+
+GET {{GeoHub_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
