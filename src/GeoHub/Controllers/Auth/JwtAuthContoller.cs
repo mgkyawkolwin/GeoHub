@@ -20,15 +20,28 @@ public class JwtAuthController : ControllerBase
     }
 
     [HttpPost("Authenticate")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Authenticate([FromBody] Login login)
     {
-        var user = await _authService.Authenticate(login);
-        if (user != null)
+        try
         {
-            var token = _tokenService.GenerateToken(user);
-            return Ok(new { Token = token });
-        }
+            var user = await _authService.Authenticate(login);
+            if (user != null)
+            {
+                var tokens = _tokenService.GenerateAllToken(login);
+                return Ok(new  {
+                    AccessToken = tokens.AccessToken,
+                    RefreshToken = tokens.RefreshToken,
+                    Expires = tokens.Expires
+                });
+            }
 
-        return Unauthorized();
+            return NotFound();
+        }catch 
+        {
+            return StatusCode(500);
+        }
     }
 }

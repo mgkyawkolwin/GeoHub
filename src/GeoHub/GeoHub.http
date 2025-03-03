@@ -1,8 +1,8 @@
 @SimpleAuthCookiesAndTokens_HostAddress = https://localhost:7074/Api
 @email = email@email.com
 @badPassword = pass
-@password = password
-@userName = user
+@password = aaa
+@userName = aaa
 @cookie = 
 
 # these come from the previous response
@@ -34,7 +34,7 @@ Content-Type: application/json
 
 # Let's register with a bad password
 # Notice the validation details that are returned
-POST {{SimpleAuthCookiesAndTokens_HostAddress}}/Auth/Authenticate
+POST {{SimpleAuthCookiesAndTokens_HostAddress}}/JwtAuth/Authenticate
 Content-Type: application/json
 
 {

@@ -8,6 +8,7 @@ using GeoHub.Common;
 using GeoHub.Data;
 using GeoHub.Services;
 using GeoHub.Configurations;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,7 +18,8 @@ builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
-builder.Services.AddDbContext<GeoHubContext>(options => options.UseFileBaseContextDatabase("GeoHubDb"));
+//builder.Services.AddDbContext<GeoHubContext>(options => options.UseFileBaseContextDatabase("GeoHubDb"));
+builder.Services.AddDbContext<GeoHubContext>(options => options.UseSqlServer(builder.Configuration["ConnectionStrings:ConnectionString"]));
 
 // Cookie Authentication
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -46,10 +48,13 @@ builder.Services.AddAuthentication(options =>
 
 // Register services
 builder.Services.AddScoped<IGeoDataService, GeoDataService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<TokenService>();
+builder.Services.AddScoped<IGeoHubContext, GeoHubContext>();
+builder.Services.AddScoped<AppSettings>();
+builder.Services.AddScoped<Jwt>();
 
-builder.Services.AddSingleton<AppSettings>();
-builder.Services.AddSingleton<Jwt>();
+
 
 var app = builder.Build();
 

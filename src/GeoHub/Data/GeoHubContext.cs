@@ -22,10 +22,15 @@ public class GeoHubContext : DbContext, IGeoHubContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         // Configure the one-to-one relationship
+        // modelBuilder.Entity<User>()
+        //     .HasOne(u => u.RefreshToken)
+        //     .WithOne(rt => rt.User)
+        //     .HasForeignKey<RefreshToken>(rt => rt.User.Id);
+
         modelBuilder.Entity<User>()
             .HasOne(u => u.RefreshToken)
             .WithOne(rt => rt.User)
-            .HasForeignKey<RefreshToken>(rt => rt.User.Id);
+            .HasForeignKey<RefreshToken>("User_Id"); 
 
         base.OnModelCreating(modelBuilder);
     }

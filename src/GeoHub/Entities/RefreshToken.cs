@@ -1,6 +1,6 @@
 namespace GeoHub.Entities;
 
-public class RefreshToken 
+public class RefreshToken : BaseEntity
 {
     public DateTime Expires { get; set; }
 
