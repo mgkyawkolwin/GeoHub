@@ -1,0 +1,73 @@
+@SimpleAuthCookiesAndTokens_HostAddress = https://localhost:7074/Api
+@email = email@email.com
+@badPassword = pass
+@password = password
+@userName = user
+@cookie = 
+
+# these come from the previous response
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyIiwianRpIjoiZGRhNzZlMmYtNmVlNi00NmY4LTk4OTYtMzk2MGUyNmJkNTdkIiwiaWF0IjoxNzQwOTY1NjA4LCJleHAiOjE3NDA5NjkyMDgsImlzcyI6Imh0dHBzOi8vZ2VvaHViLmNvbSIsImF1ZCI6Imh0dHBzOi8vZ2VvaHViLmNvbSJ9.AelNhaJR3kqQyr-KYs_SZTitDHWhc9d6GQb9HpWeaXs
+@refreshToken = CfDJ8E46Fyzd04JGl9vtQodo5mwKOiv-_rqPwVo-c_c3rPA6mSuHHEf5r5RflzQ4U4LPlqNTdE9vgg3jtjgVSbjhyNFG0EebFhKP-2YMLkBkZQ3naqZzoErX42mP8F90yxymPLzyA1HEq8YJmvb_LUDOVMyDeKWBuv-cae_u3fQB_NoYZIZ-x6Cc07mGtO-ZJvWwod0aco_zgfgX3ICLXZwG0ZyR99JR32Nqfnfrv9Ygw4VRtGFRg3Mfmfd5MU3VMr6LzyPIV6-ohGjHo8kvHvypHCTvnTwhh_LcQlH2aC-m_TP_PGSOlijz8hS8s6Cc_w8NbNx8rgsvjdEezc1bP6pqm9q2pC1ZXfJwfmFIHA2WsF_kFnwju5qKNusoTMRp66VO-9f4en52u70KyxDNwKG6od9PSkn2LH858nREgOqGIrwBdbSXsBC9thSUaS3-IEAPsRlIgu5pucqaEQit-05FOdhitfBsSdgFRpl-wheKdZa0sPRWu072cEbomqj3uG-6ciFI0yVCTaJc_6k9vYWu9jvKwufA4quoZ4bJnGB5o0U8_ptTZ6sEFBqD8QvBzq29rhCYrvOgJmxNVs8_hXhQ6TliyG6A3AbHypUWHEqzRoF7_LP9kyM0ZVzpXY4USoJ3u0a1V6ldRcdcQLfuMsGjtB8RQp0Xi_9VsY7RP7We6NYV
+
+# This should return Ok
+GET {{SimpleAuthCookiesAndTokens_HostAddress}}/GeoData/GetCountries
+Accept: application/json
+
+###
+# This should return 401 - unauthorized
+
+GET {{SimpleAuthCookiesAndTokens_HostAddress}}/GeoData/GetCountriesSecured
+Accept: application/json
+
+###
+
+# Let's register with a bad password
+POST {{SimpleAuthCookiesAndTokens_HostAddress}}/Auth/Authenticate
+Content-Type: application/json
+
+{
+  "Password": "{{badPassword}}",
+  "UserName": "{{userName}}"
+}
+
+###
+
+# Let's register with a bad password
+# Notice the validation details that are returned
+POST {{SimpleAuthCookiesAndTokens_HostAddress}}/Auth/Authenticate
+Content-Type: application/json
+
+{
+  "Password": "{{password}}",
+  "UserName": "{{userName}}"
+}
+
+###
+
+# Now a valid one
+
+GET {{SimpleAuthCookiesAndTokens_HostAddress}}/Auth/Unauthenticate
+Content-Type: application/json
+
+###
+
+# Let's try the weather again, this time with a token
+# This should return the "weather"
+
+GET {{SimpleAuthCookiesAndTokens_HostAddress}}/geodata/getcountriessecured/
+Authorization: Bearer {{accessToken}}
+Accept: application/json
+
+###
+
+# Now assume the session is about to expire and you want to extend the session without forcing the user to login again.
+POST {{SimpleAuthCookiesAndTokens_HostAddress}}/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "{{refreshToken}}" 
+}
+
+###
+
+# You should get a new set of credentials, including the refresh token
