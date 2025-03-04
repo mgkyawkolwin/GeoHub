@@ -47,12 +47,16 @@ builder.Services.AddAuthentication(options =>
 });
 
 // Register services
+builder.Services.AddSingleton<AppSettings>();
+builder.Services.AddSingleton<Jwt>();
+
+builder.Services.AddTransient<IAuthService, AuthService>();
+builder.Services.AddTransient<TokenService>();
+
 builder.Services.AddScoped<IGeoDataService, GeoDataService>();
-builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<IGeoHubContext, GeoHubContext>();
-builder.Services.AddScoped<AppSettings>();
-builder.Services.AddScoped<Jwt>();
+
+
 
 
 
