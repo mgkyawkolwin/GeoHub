@@ -21,7 +21,7 @@ env:
   SOLUTION_FILE_PATH: ./
 
   # Path to the test profile file relative to the root of the project.
-  TEST_FILE_PATH: ./GeoHub/src/Tests/UnitTests/
+  TEST_FILE_PATH: ./src/Tests/UnitTests/
 
   # Configuration type to build.
   # You can convert this to a build matrix if you need coverage of multiple configuration types.
