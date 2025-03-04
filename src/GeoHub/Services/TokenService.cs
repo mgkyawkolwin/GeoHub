@@ -69,21 +69,21 @@ public class TokenService
 
     public async Task<(string AccessToken, string RefreshToken)> RefreshToken(string rToken)
     {
-        var refreshToken = await _geoHubContext.RefreshTokens
-            .FirstOrDefaultAsync(rt => rt.Token == rToken);
+        var refreshToken = await _geoHubContext.JwtTokens
+            .FirstOrDefaultAsync(rt => rt.RefreshToken == rToken);
 
-        if (refreshToken == null || refreshToken.Expires < DateTime.UtcNow)
+        if (refreshToken == null || refreshToken.ExpiresIn < DateTime.UtcNow)
         {
             return default;
         }
 
         // Generate new access token
-        var user = await _geoHubContext.Users.FirstOrDefaultAsync(u => u.RefreshToken.Token == rToken);
+        var user = await _geoHubContext.Users.FirstOrDefaultAsync(u => u.JwtToken.RefreshToken == rToken);
         var newAccessToken = GenerateAccessToken(user.UserName);
 
         // Optionally, generate a new refresh token and revoke the old one
         var newRefreshToken = GenerateRefreshToken();
-        refreshToken.Token = newRefreshToken;
+        refreshToken.RefreshToken = newRefreshToken;
 
         await SaveRefreshToken(user, newRefreshToken);
 
@@ -93,20 +93,20 @@ public class TokenService
 
     public async Task RevokeToken(string rToken)
     {
-        var refreshToken = await _geoHubContext.RefreshTokens
-            .FirstOrDefaultAsync(rt => rt.Token == rToken);
+        var refreshToken = await _geoHubContext.JwtTokens
+            .FirstOrDefaultAsync(rt => rt.RefreshToken == rToken);
 
         if (refreshToken != null)
         {
-            refreshToken.Expires = DateTime.UtcNow;
-            _geoHubContext.RefreshTokens.Update(refreshToken);
+            refreshToken.ExpiresIn = DateTime.UtcNow;
+            _geoHubContext.JwtTokens.Update(refreshToken);
         }
     }
     
     private async Task SaveRefreshToken(User user, string refreshToken)
     {
-        user.RefreshToken.Token = refreshToken;
-        user.RefreshToken.Expires = DateTime.UtcNow.AddMinutes(20);
+        user.JwtToken.RefreshToken = refreshToken;
+        user.JwtToken.ExpiresIn = DateTime.UtcNow.AddMinutes(20);
 
         _geoHubContext.Users.Update(user);
     }

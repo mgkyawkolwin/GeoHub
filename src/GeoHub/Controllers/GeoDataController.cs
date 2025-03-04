@@ -28,7 +28,7 @@ public class GeoDataController : ControllerBase
         try
         {
             var countries = await _geoDataService.GetCountries();
-            var list = countries.Select(country => new Country{
+            var list = countries.Select(country => new {
                 CountryName = country.CountryName,
                 CountryCode = country.CountryCode
             }).ToList();
@@ -51,7 +51,7 @@ public class GeoDataController : ControllerBase
         try
         {
             var countries = await _geoDataService.GetCountries();
-            var list = countries.Select(country => new Country{
+            var list = countries.Select(country => new {
                 CountryName = country.CountryName,
                 CountryCode = country.CountryCode
             }).ToList();

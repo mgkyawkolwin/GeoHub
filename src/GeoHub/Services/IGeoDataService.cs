@@ -5,6 +5,6 @@ namespace GeoHub.Services;
 
 public interface IGeoDataService
 {
-     Task<List<CountryEntity>> GetCountries();
+     Task<List<Country>> GetCountries();
 
 }

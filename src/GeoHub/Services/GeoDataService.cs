@@ -17,7 +17,7 @@ public class GeoDataService : IGeoDataService
         _dataContext = dataContext;
     }
 
-    public async Task<List<CountryEntity>> GetCountries()
+    public async Task<List<Country>> GetCountries()
     {
         return await _dataContext.Countries.ToListAsync();
     }

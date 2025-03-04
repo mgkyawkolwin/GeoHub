@@ -6,5 +6,6 @@ public class User : BaseEntity
 
     public string? Password { get; set; }
 
-    public RefreshToken? RefreshToken { get; set; }
+    public JwtToken? JwtToken { get; set; }
+    
 }

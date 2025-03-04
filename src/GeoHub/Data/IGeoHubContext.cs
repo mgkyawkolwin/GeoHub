@@ -6,10 +6,10 @@ namespace GeoHub.Data;
 
 public interface IGeoHubContext
 {
-    DbSet<CountryEntity> Countries { get; set; }
-    DbSet<RefreshToken> RefreshTokens { get; set; }
+    DbSet<Country> Countries { get; set; }
+    DbSet<JwtToken> JwtTokens { get; set; }
     DbSet<User> Users { get; set; }
 
     Task<User> GetUserWithReferenceToken(int userId);
-    Task SaveRefreshToken(RefreshToken refreshToken);
+    Task SaveRefreshToken(JwtToken refreshToken);
 }

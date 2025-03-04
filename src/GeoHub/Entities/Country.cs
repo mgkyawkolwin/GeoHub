@@ -1,6 +1,6 @@
 namespace GeoHub.Entities;
 
-public sealed class CountryEntity : BaseEntity
+public sealed class Country : BaseEntity
 {
     public string? CountryCode { get; set; }
 

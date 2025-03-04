@@ -1,10 +1,14 @@
 namespace GeoHub.Entities;
 
-public class RefreshToken : BaseEntity
+public class JwtToken : BaseEntity
 {
-    public DateTime Expires { get; set; }
+    public string? AccessToken { get; set;}
 
-    public string? Token { get; set;}
+    public DateTime ExpiresIn { get; set; }
+
+    public string? RefreshToken { get; set;}
+
+    public string? TokenType { get; set;}
 
     public User? User { get; set; }
 

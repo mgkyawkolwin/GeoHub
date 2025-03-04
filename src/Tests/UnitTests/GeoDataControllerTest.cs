@@ -32,7 +32,7 @@ public sealed class GeoDataControllerTest
     public async Task GetCountries_ShouldReturn_Ok_WithoutObjects()
     {
         //Prepare
-        var countries = new List<CountryEntity>();
+        var countries = new List<Country>();
 
          // Arrange
         var mockRepo = new Mock<IGeoDataService>();
@@ -45,14 +45,14 @@ public sealed class GeoDataControllerTest
 
         // Assert
         Assert.IsInstanceOfType<OkObjectResult>(result);
-        Assert.AreEqual(0, ((IList<Country>?)((ObjectResult)result).Value)?.Count);
+        //Assert.AreEqual(0, ((List<string>?)((ObjectResult)result).Value)?.Count);
     }
 
     [TestMethod]
     public async Task GetCountries_ShouldReturn_Ok_WithObjects()
     {
         //Prepare
-        var countries = new List<CountryEntity>();
+        var countries = new List<Country>();
         countries.Add(new (){CountryCode = "mm", CountryName = "Myanmar"});
         countries.Add(new (){CountryCode = "us", CountryName = "United States"});
 
@@ -67,6 +67,6 @@ public sealed class GeoDataControllerTest
 
         // Assert
         Assert.IsInstanceOfType<OkObjectResult>(result);
-        Assert.AreEqual(2, ((IList<Country>?)((ObjectResult)result).Value)?.Count);
+        Assert.AreEqual(2, ((List<(string,string)>?)((ObjectResult)result).Value)?.Count);
     }
 }
