@@ -39,6 +39,9 @@ jobs:
         dotnet-version: ['9.0.x' ]
 
     steps:
+    - name : Test Output
+      run: echo ${{env.GITHUB_WORKSPACE}}
+      
     - uses: actions/checkout@v4
 
     - name: Add MSBuild to PATH
