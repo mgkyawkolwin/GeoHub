@@ -1,0 +1,83 @@
+@SimpleAuthCookiesAndTokens_HostAddress = https://localhost:7074
+@email = test@x.z
+@badPassword = password
+@password = P455w0rd!
+@userName = aaa
+
+# This should return 401 - unauthorized
+GET {{SimpleAuthCookiesAndTokens_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
+
+# Let's register with a bad password
+# Notice the validation details that are returned
+POST {{SimpleAuthCookiesAndTokens_HostAddress}}/register
+Content-Type: application/json
+
+{
+  "email": "{{email}}",
+  "password": "{{badPassword}}",
+  "confirmPassword": "{{badPassword}}",
+  "userName": "{{userName}}"
+}
+
+###
+
+# Now a valid one
+POST {{SimpleAuthCookiesAndTokens_HostAddress}}/register
+Content-Type: application/json
+
+{
+  "email": "{{email}}",
+  "password": "{{password}}",
+  "confirmPassword": "{{password}}"
+}
+
+###
+
+# Let's login with a bad password
+POST {{SimpleAuthCookiesAndTokens_HostAddress}}/login
+Content-Type: application/json
+
+{
+  "email": "{{email}}",
+  "password": "{{badPassword}}"
+}
+
+###
+
+# And the right one. Be sure to copy and paste the tokens from the response.
+# Notice you get when the current token will expire in the response.
+POST {{SimpleAuthCookiesAndTokens_HostAddress}}/login
+Content-Type: application/json
+
+{
+  "email": "{{email}}",
+  "password": "{{password}}"
+}
+
+###
+
+# these come from the previous response
+@accessToken = CfDJ8E46Fyzd04JGl9vtQodo5mwCYd164SzxyaYovQn-6jAjJA0v-ArGIfjhva1sKPvMYHfTPZ1Mi7W2Ju95kGkDfT_sv0ejAYGemSK1N2YBHBRmdyZz2riu_FGENv-X2gwBrLjEfcSrA7k0lXMpGNLOkSA7c89a2UEbT8gHgFVmEWYeNzgEwJAsLwe8TUhuN4pK7CgGX2vas32n012uubBYfe4Uv2xc9TdiG3V6xextXuySl1FEc_p-E7WVnaxh_ML3lKBM9_Wf0B25AItG7EONoFvzrGpwaenjrDmGpJhvDXBz0phMRfNJrPf6czT5rXMftcmKe4M7LOhTrBWZq-49jiifgnUszu_BwUNV1s3AYlisdF2fU0w5VmJNS8vqRrzWa6qochFLEk03iXP2L5CUmzcBCupg85HMnT0TyTzDBx-dFTGefU_QDhytYgW6RmtzKw1ln9LYaR6IrC-T8UTktenaqY0h-ZMNxKhJpFc8o9jN4XavLyCDKfxBJ_bKFQbH7zpIVIEZmVBJtgGeJQsCcx0iOK5_IH4WYFYxTjZvxjk36U5kAnMNT6CnjZzOsabtyaPeoiVKUamMuVdmovysxUwcMIJziVEiVWIQh0-LrmFzMw3pQhPEMLqvGgG20zUzVvOr2rZfPQuVnQTnIVu8wdJlNo0wQpzgWAtBFUO9xUir
+@refreshToken = CfDJ8E46Fyzd04JGl9vtQodo5mwKOiv-_rqPwVo-c_c3rPA6mSuHHEf5r5RflzQ4U4LPlqNTdE9vgg3jtjgVSbjhyNFG0EebFhKP-2YMLkBkZQ3naqZzoErX42mP8F90yxymPLzyA1HEq8YJmvb_LUDOVMyDeKWBuv-cae_u3fQB_NoYZIZ-x6Cc07mGtO-ZJvWwod0aco_zgfgX3ICLXZwG0ZyR99JR32Nqfnfrv9Ygw4VRtGFRg3Mfmfd5MU3VMr6LzyPIV6-ohGjHo8kvHvypHCTvnTwhh_LcQlH2aC-m_TP_PGSOlijz8hS8s6Cc_w8NbNx8rgsvjdEezc1bP6pqm9q2pC1ZXfJwfmFIHA2WsF_kFnwju5qKNusoTMRp66VO-9f4en52u70KyxDNwKG6od9PSkn2LH858nREgOqGIrwBdbSXsBC9thSUaS3-IEAPsRlIgu5pucqaEQit-05FOdhitfBsSdgFRpl-wheKdZa0sPRWu072cEbomqj3uG-6ciFI0yVCTaJc_6k9vYWu9jvKwufA4quoZ4bJnGB5o0U8_ptTZ6sEFBqD8QvBzq29rhCYrvOgJmxNVs8_hXhQ6TliyG6A3AbHypUWHEqzRoF7_LP9kyM0ZVzpXY4USoJ3u0a1V6ldRcdcQLfuMsGjtB8RQp0Xi_9VsY7RP7We6NYV
+# Let's try the weather again, this time with a token
+# This should return the "weather"
+GET {{SimpleAuthCookiesAndTokens_HostAddress}}/weatherforecast/
+Authorization: Bearer {{accessToken}}
+Accept: application/json
+
+###
+
+# Now assume the session is about to expire and you want to extend the session without forcing the user to login again.
+POST {{SimpleAuthCookiesAndTokens_HostAddress}}/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "{{refreshToken}}" 
+}
+
+###
+
+# You should get a new set of credentials, including the refresh token
