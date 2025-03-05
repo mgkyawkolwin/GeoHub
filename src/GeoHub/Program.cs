@@ -57,6 +57,17 @@ builder.Services.AddScoped<IGeoDataService, GeoDataService>();
 builder.Services.AddScoped<IGeoHubContext, GeoHubContext>();
 
 
+// Build the service provider
+var sp = builder.Services.BuildServiceProvider();
+
+// Ensure the database is created and migrated
+using (var scope = sp.CreateScope())
+{
+    var scopedServices = scope.ServiceProvider;
+    var db = scopedServices.GetRequiredService<GeoHubContext>();
+    //db.Database.EnsureCreated();
+    db.Database.Migrate();
+}
 
 
 
@@ -71,6 +82,7 @@ if (app.Environment.IsDevelopment())
         options.DocumentPath = "/openapi/v1.json";
     });
 }
+
 
 
 app.UseAuthentication();
